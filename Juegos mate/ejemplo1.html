@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Burbujas Matemáticas · Prolipa</title>
+  <meta name="description" content="Juego educativo de Prolipa para practicar sumas, restas, multiplicaciones y divisiones.">
+  <meta name="theme-color" content="#003f7d">
+  <link rel="icon" type="image/png" href="assets/prolipa-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="loading">
+
+  <!-- Iconos reutilizables -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-flame" viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z" fill="currentColor"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 1.8 3 6.5 7 .8-5.2 4.8 1.5 7-6.3-3.6-6.3 3.6 1.5-7L2 9.1l7-.8z" fill="currentColor"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><rect x="5" y="3.5" width="5" height="17" rx="1.6" fill="currentColor"/><rect x="14" y="3.5" width="5" height="17" rx="1.6" fill="currentColor"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 3.5v17a1 1 0 0 0 1.5.9l14-8.5a1 1 0 0 0 0-1.8l-14-8.5A1 1 0 0 0 6 3.5z" fill="currentColor"/></symbol>
+      <symbol id="i-restart" viewBox="0 0 24 24"><path d="M12 4.5a7.5 7.5 0 1 0 7.2 9.6" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" fill="none"/><path d="m12.5 1 5 3.8-5.4 3.4z" fill="currentColor"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11.2 12 3l9 8.2V21a1 1 0 0 1-1 1h-5v-6.5H9V22H4a1 1 0 0 1-1-1z" fill="currentColor"/></symbol>
+      <symbol id="i-sound" viewBox="0 0 24 24"><path d="M3 9.5v5h4l5.5 4.5V5L7 9.5z" fill="currentColor"/><path d="M16 8.6a5 5 0 0 1 0 6.8M18.6 5.9a8.8 8.8 0 0 1 0 12.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></symbol>
+      <symbol id="i-mute" viewBox="0 0 24 24"><path d="M3 9.5v5h4l5.5 4.5V5L7 9.5z" fill="currentColor"/><path d="m16 9.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M12 8.5V13l3 2M9.5 2.5h5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v11m0 0-4.5-4.5M12 14l4.5-4.5M4 17v2.5A1.5 1.5 0 0 0 5.5 21h13a1.5 1.5 0 0 0 1.5-1.5V17" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 22V3m0 1h13l-3 4.5 3 4.5H5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+      <linearGradient id="gearG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2a8be0"/><stop offset="1" stop-color="#003f7d"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="backdrop" id="backdrop"></div>
+
+  <main class="stage" id="stage">
+
+    <!-- Encabezado con el logo de Prolipa -->
+    <header class="topbar">
+      <img class="logo" src="assets/prolipa-logo.png" alt="Prolipa · Vanguardia en educación">
+      <div class="top-right">
+        <div class="op-chip" id="opChip" data-op="suma">
+          <i id="opChipSign">+</i>
+          <span><b id="opChipName">Suma</b><small id="opChipSub">Normal</small></span>
+        </div>
+        <button class="icon-btn" id="btnSound" aria-label="Sonido"><svg><use href="#i-sound"/></svg></button>
+      </div>
+    </header>
+
+    <!-- Misión del nivel: el personaje del estudiante y los libros que se van iluminando -->
+    <section class="quest" id="quest">
+      <div class="avatar" id="avatar"><div class="grow" id="avatarGrow"></div></div>
+      <div class="quest-main">
+        <div class="quest-top">
+          <b id="questTitle">Nivel 1 · Aprendiz</b>
+          <span class="time"><svg><use href="#i-clock"/></svg><em id="time">00:00</em></span>
+        </div>
+        <div class="slots" id="slots" aria-label="Objetivos del nivel"></div>
+      </div>
+    </section>
+
+    <!-- Campo de juego -->
+    <section class="field" id="field">
+      <div class="shake" id="shake">
+        <canvas id="cv" aria-label="Campo de juego"></canvas>
+        <div class="fx-layer" id="fxLayer"></div>
+        <div class="wave" id="wave" title="Siguientes burbujas"><i id="waveFill"></i></div>
+        <div class="expr" id="expr"><span id="exprText"></span><small id="exprExtra"></small></div>
+        <div class="banner" id="banner"><svg><use href="#i-flame"/></svg><span></span></div>
+      </div>
+    </section>
+
+    <!-- Barra inferior: puntos, objetivo y pausa -->
+    <footer class="bar">
+      <div class="bar-left">
+        <div class="score">Puntos: <b id="score">0</b></div>
+        <div class="chips">
+          <span class="chip flame" title="Aciertos seguidos"><svg><use href="#i-flame"/></svg>Racha <em id="streakNum">0</em></span>
+        </div>
+      </div>
+      <div class="target" id="target">
+        <div class="gear"><svg viewBox="0 0 100 100"><path id="gearPath" fill="url(#gearG)" stroke="#9cc7f0" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+        <div class="core"><small>Objetivo</small><b id="targetNum">0</b></div>
+      </div>
+      <button class="pause-btn" id="btnPause" aria-label="Pausa"><svg><use href="#i-pause"/></svg></button>
+    </footer>
+
+    <!-- ¿Quién va a jugar? -->
+    <section class="screen menu show" id="screenProfile">
+      <div class="menu-card profile-card" id="profileCard">
+        <img class="menu-logo" src="assets/prolipa-logo.png" alt="Prolipa · Vanguardia en educación">
+        <h1 class="menu-title">¿Quién va a jugar?</h1>
+
+        <label class="field-row">
+          <span>Mi nombre</span>
+          <input id="inName" type="text" maxlength="30" placeholder="Escribe tu nombre" autocomplete="off">
+        </label>
+
+        <h2>Elige tu animal</h2>
+        <div class="animals" id="animals" role="radiogroup" aria-label="Animal"></div>
+
+        <div class="recent" id="recent" hidden>
+          <small>Jugadores en este equipo (toca tu nombre)</small>
+          <div class="recent-list" id="recentList"></div>
+        </div>
+        <p class="full-note" id="fullNote" hidden></p>
+
+        <button class="play-btn" id="btnReady" type="button" disabled>¡Listo!</button>
+        <p class="foot">Tu nombre aparecerá en tu reporte</p>
+      </div>
+    </section>
+
+    <!-- Menú principal -->
+    <section class="screen menu" id="screenMenu">
+      <div class="menu-card" id="menuCard">
+        <img class="menu-logo" src="assets/prolipa-logo.png" alt="Prolipa · Vanguardia en educación">
+        <h1 class="menu-title">Burbujas Matemáticas</h1>
+        <div class="player-row" id="playerRow">
+          <div class="menu-mascot" id="menuMascot"></div>
+          <div class="player-info">
+            <b id="playerHello">¡Hola!</b>
+            <small id="playerCourse"></small>
+          </div>
+          <button class="link-btn" id="btnChangePlayer" type="button">Cambiar jugador</button>
+        </div>
+
+        <h2><span class="step">1</span>¿Qué quieres practicar?</h2>
+        <div class="ops" id="ops" role="radiogroup" aria-label="Operación">
+          <button class="op-btn" data-op="suma" role="radio"><span class="sign">+</span><span class="txt"><b>Sumar</b><small>Récord: <i>0</i></small></span></button>
+          <button class="op-btn" data-op="resta" role="radio"><span class="sign">−</span><span class="txt"><b>Restar</b><small>Récord: <i>0</i></small></span></button>
+          <button class="op-btn" data-op="mult" role="radio"><span class="sign">×</span><span class="txt"><b>Multiplicar</b><small>Récord: <i>0</i></small></span></button>
+          <button class="op-btn" data-op="div" role="radio"><span class="sign">÷</span><span class="txt"><b>Dividir</b><small>Récord: <i>0</i></small></span></button>
+        </div>
+
+        <h2><span class="step">2</span>¿En qué grado estás?</h2>
+        <div class="grades" id="grades" role="radiogroup" aria-label="Grado"></div>
+        <p class="grade-info" id="gradeInfo"></p>
+
+        <h2><span class="step">3</span>¿De cuántos dígitos?</h2>
+        <div class="digits" id="digits" role="radiogroup" aria-label="Dígitos">
+          <button class="dig" data-digits="1" type="button" role="radio"><b>1 dígito</b><small></small></button>
+          <button class="dig" data-digits="2" type="button" role="radio"><b>2 dígitos</b><small></small></button>
+          <button class="dig" data-digits="3" type="button" role="radio"><b>3 dígitos</b><small></small></button>
+        </div>
+
+        <h2><span class="step">4</span>¿Cuántas burbujas usarás?</h2>
+        <div class="modes" id="modes" role="radiogroup" aria-label="Modalidad">
+          <button class="mode" data-mode="pair" type="button" role="radio">
+            <span class="mode-ic"><i>7</i><i>3</i></span>
+            <span class="txt"><b>Solo 2 burbujas</b><small>Una pareja por jugada</small></span>
+          </button>
+          <button class="mode" data-mode="multi" type="button" role="radio">
+            <span class="mode-ic"><i>2</i><i>4</i><i>5</i></span>
+            <span class="txt"><b>Varias burbujas</b><small>2 o más por jugada</small></span>
+          </button>
+        </div>
+
+        <p class="howto" id="howto"></p>
+
+        <button class="play-btn" id="btnPlay"><svg><use href="#i-play"/></svg>¡Jugar!</button>
+      </div>
+    </section>
+
+    <!-- Pausa -->
+    <section class="screen overlay" id="screenPause">
+      <div class="panel">
+        <h2 class="panel-title">Pausa</h2>
+        <p class="howto small" id="howtoPause"></p>
+        <button class="btn primary" id="btnResume"><svg><use href="#i-play"/></svg>Continuar</button>
+        <button class="btn" id="btnRestart"><svg><use href="#i-restart"/></svg>Empezar de nuevo</button>
+        <button class="btn finish" id="btnFinish"><svg><use href="#i-flag"/></svg><span>Terminar actividad y ver reporte</span></button>
+        <button class="btn" id="btnMenuP"><svg><use href="#i-home"/></svg>Cambiar operación</button>
+      </div>
+    </section>
+
+    <!-- Nivel completado -->
+    <section class="screen overlay" id="screenLevel">
+      <div class="panel level-panel">
+        <div class="rays"></div>
+        <h2 class="panel-title" id="lvTitle">¡Nivel 1 completado!</h2>
+        <div class="lv-mascot" id="lvMascot"></div>
+        <p class="lv-rank" id="lvRank">Ahora es Estudiante</p>
+        <p class="lv-unlock" id="lvUnlock"></p>
+        <div class="lv-stars" id="lvStars">
+          <svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg>
+        </div>
+        <p class="lv-next" id="lvNext"></p>
+        <button class="btn primary" id="btnNext">¡Seguir!</button>
+      </div>
+    </section>
+
+    <!-- Fin de la actividad -->
+    <section class="screen overlay" id="screenOver">
+      <div class="panel over-panel">
+        <div class="ribbon" id="ribbon"><svg><use href="#i-star"/></svg>¡Nuevo récord!</div>
+        <div class="over-mascot" id="overMascot"></div>
+        <h2 class="panel-title" id="overTitle">¡Buen trabajo!</h2>
+        <p class="over-sub" id="overSub"></p>
+        <div class="big-score"><small>Puntos</small><b id="overScore">0</b></div>
+        <p class="best">Mejor puntaje: <b id="overBest">0</b></p>
+        <div class="stats">
+          <div><b id="stLevel">1</b><small>Nivel</small></div>
+          <div><b id="stTime">00:00</b><small>Tiempo</small></div>
+          <div><b id="stHits">0</b><small>Aciertos</small></div>
+          <div><b id="stErrors">0</b><small>Errores</small></div>
+          <div><b id="stAcc">0%</b><small>Precisión</small></div>
+          <div><b id="stStreak">0</b><small>Mejor racha</small></div>
+        </div>
+        <button class="btn primary" id="btnReport"><svg><use href="#i-download"/></svg><span>Descargar reporte (PDF)</span></button>
+        <div class="btn-row">
+          <button class="btn" id="btnAgain"><svg><use href="#i-restart"/></svg>Jugar otra vez</button>
+          <button class="btn" id="btnMenuO"><svg><use href="#i-home"/></svg>Menú</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="lib/matter.min.js"></script>
+  <script src="lib/gsap.min.js"></script>
+  <script src="lib/confetti.browser.min.js"></script>
+  <script src="lib/jspdf.umd.min.js"></script>
+  <script src="js/report-assets.js"></script>
+  <script src="js/rules.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/avatar.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/report.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

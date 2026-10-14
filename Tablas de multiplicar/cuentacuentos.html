@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Cuentacuentos · Prolipa</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/cuentos.css">
+</head>
+<body>
+  <main class="app" id="app">
+    <header class="barra" id="barra" data-pantalla="pBiblioteca">
+      <button class="btn-icono" id="btnBiblioteca" aria-label="Volver a la biblioteca de cuentos" hidden>📚</button>
+      <img class="logo" src="img/logo-prolipa.png" width="738" height="252" alt="Prolipa, vanguardia en educación">
+      <div class="pildora">
+        <span class="pildora-icono" aria-hidden="true">📖</span>
+        <span class="pildora-texto"><strong>Cuentacuentos</strong><small>Escucha y lee</small></span>
+      </div>
+    </header>
+
+    <!-- ============ BIBLIOTECA ============ -->
+    <section class="pantalla" id="pBiblioteca">
+      <div class="mascota-fila">
+        <div class="mascota" aria-hidden="true">🐼</div>
+        <div class="globo">¡Hola! ¿Qué cuento quieres escuchar hoy?</div>
+      </div>
+
+      <div class="estanteria" id="estanteria"></div>
+
+      <div class="tarjeta" id="sinCuentos" hidden>
+        <h2>Todavía no hay cuentos</h2>
+        <p>Cree los audios de un cuento con <b>herramientas/generar_todos.bat</b> y recargue esta página.</p>
+      </div>
+    </section>
+
+    <!-- ============ LECTOR ============ -->
+    <section class="pantalla" id="pCuento" hidden>
+      <div class="cuento-cab">
+        <strong id="cuentoTitulo">Título</strong>
+        <small id="cuentoPagina">Página 1 de 1</small>
+      </div>
+      <div class="puntos" id="puntos" role="group" aria-label="Páginas del cuento"></div>
+
+      <div class="ilustracion" id="ilustracion">
+        <img id="imgPagina" alt="" draggable="false">
+        <div class="ilustracion-vacia" id="ilustracionVacia" hidden></div>
+        <button class="flecha izq" id="btnPagAnterior" aria-label="Página anterior">‹</button>
+        <button class="flecha der" id="btnPagSiguiente" aria-label="Página siguiente">›</button>
+      </div>
+
+      <div class="texto" id="texto" tabindex="0" aria-label="Texto del cuento"></div>
+
+      <div class="controles" role="group" aria-label="Controles de lectura">
+        <button class="btn-ctl" id="btnTamano" aria-label="Cambiar el tamaño de la letra" title="Tamaño de la letra">Aa</button>
+        <button class="btn-ctl" id="btnLineaAnterior" aria-label="Línea anterior" title="Línea anterior">⏮</button>
+        <button class="btn-play" id="btnPlay" aria-label="Escuchar el cuento">▶</button>
+        <button class="btn-ctl" id="btnLineaSiguiente" aria-label="Línea siguiente" title="Línea siguiente">⏭</button>
+        <button class="btn-ctl" id="btnVelocidad" aria-label="Cambiar la velocidad de lectura" title="Velocidad">1×</button>
+      </div>
+    </section>
+
+    <!-- ============ FIN ============ -->
+    <section class="pantalla" id="pFin" hidden>
+      <div class="tarjeta fin">
+        <div class="fin-emoji" aria-hidden="true">🌟</div>
+        <h2>¡Fin del cuento!</h2>
+        <p id="finTitulo"></p>
+        <div class="acciones-fin">
+          <button class="btn btn-verde grande" id="btnOtraVez">↺ Escuchar otra vez</button>
+          <button class="btn btn-azul" id="btnMasCuentos">📚 Más cuentos</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="aviso" id="aviso" role="status" aria-live="polite" hidden></div>
+  </main>
+
+  <!-- Librerías de terceros incluidas en el proyecto (ver lib/LIBRERIAS.md) -->
+  <script src="lib/gsap.min.js"></script>
+  <script src="lib/confetti.browser.js"></script>
+  <!-- Biblioteca de cuentos: la crea herramientas/generar_cuento.py -->
+  <script src="cuentos/catalogo.js"></script>
+  <!-- Archivo propio de la actividad de cuentacuentos -->
+  <script src="js/cuentos-lector.js"></script>
+</body>
+</html>

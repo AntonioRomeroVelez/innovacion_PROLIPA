@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leemos juntos · otra lectura</title>
+<link rel="stylesheet" href="motor/estilos.css?v=11">
+</head>
+<body>
+
+<!--
+  OTRA PÁGINA, OTRA LECTURA. Es el mismo motor; solo cambia qué lectura se muestra.
+
+  Aquí los archivos de la lectura se incluyen con <script>. Si no se incluyen,
+  el motor los busca solo en data-base + <id>/ (como hace index.html).
+-->
+<div id="lector" data-lectura="el-viaje-de-una-palabra"></div>
+
+<script src="motor/lecturas.js?v=11"></script>
+<script src="lecturas/_comun/voces.js"></script>
+<script src="lecturas/_comun/texto.js"></script>
+<script src="lecturas/_comun/audio.js"></script>
+<script src="lecturas/el-viaje-de-una-palabra/texto.js"></script>
+<script src="lecturas/el-viaje-de-una-palabra/audio.js"></script>
+
+<script src="motor/escucha.js?v=11"></script>
+<script src="motor/escena.js?v=11"></script>
+<script src="motor/lector.js?v=11"></script>
+<script>Lector.montar('#lector');</script>
+</body>
+</html>

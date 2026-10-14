@@ -1,0 +1,46 @@
+# ============================================================================================
+#  PLANTILLA PARA UN CUENTO NUEVO
+#
+#  1. Copie esta carpeta ("_plantilla") dentro de "cuentos" y póngale el nombre del cuento
+#     (en minúsculas y con guiones, por ejemplo: "el-patito-feo").
+#  2. Cambie los textos de este archivo y ponga las ilustraciones en la carpeta "imagenes".
+#  3. Cree los audios: doble clic en "herramientas/generar_todos.bat"
+#     (o:  python generar_cuento.py el-patito-feo).
+#  4. Abra "cuentacuentos.html": el cuento aparece solo en la biblioteca.
+#
+#  Las líneas que empiezan con # son comentarios: el programa las ignora.
+# ============================================================================================
+
+# --- Datos del cuento (escriba cada dato en una línea: clave: valor) ---------------------------
+titulo: Título del cuento
+autor: Nombre del autor
+descripcion: Una frase que cuente de qué trata el cuento.
+portada: imagenes/portada.svg
+idioma: es
+orden: 10
+
+# --- Personajes ---------------------------------------------------------------------------------
+#  Una línea por personaje:  clave | nombre=... | voz=... | velocidad=... | tono=... | color=... | emoji=...
+#    clave      : la palabra con la que se nombra al personaje más abajo, al empezar cada línea del
+#                 cuento (en minúsculas, sin espacios; por ejemplo: nina)
+#    nombre     : cómo se muestra su nombre en el cuento (por ejemplo: La niña)
+#    voz        : la voz que lo lee. Para ver todas las voces:  python generar_cuento.py --voces es
+#                 Algunas de Ecuador: es-EC-LuisNeural (hombre), es-EC-AndreaNeural (mujer)
+#    velocidad  : -20% la hace más lenta, +20% más rápida (opcional)
+#    tono       : -30Hz más grave, +40Hz más aguda (opcional; sirve para que dos personajes con la
+#                 misma voz suenen distinto)
+#    color      : color de sus globos de texto y del resaltado (opcional)
+#    emoji      : su cara en el cuento (opcional)
+[personajes]
+narrador | nombre=Narrador   | voz=es-EC-LuisNeural   | velocidad=-8%  | tono=+0Hz  | color=#2b8cf0 | emoji=📖
+nina     | nombre=La niña    | voz=es-EC-AndreaNeural | velocidad=+5%  | tono=+30Hz | color=#d6336c | emoji=👧
+
+# --- Páginas --------------------------------------------------------------------------------------
+#  Cada [pagina] lleva su ilustración. Debajo, una línea por intervención:  personaje: texto
+#  Las líneas largas se leen mejor si las divide en dos o tres líneas del mismo personaje.
+[pagina] imagen=imagenes/p1.svg
+narrador: Escriba aquí lo que cuenta el narrador en la primera página.
+nina: ¡Y aquí, lo que dice la niña!
+
+[pagina] imagen=imagenes/p2.svg
+narrador: Segunda página del cuento.

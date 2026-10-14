@@ -1,0 +1,42 @@
+# ============================================================================================
+#  LA TORTUGA Y LA LIEBRE  —  cuento de ejemplo
+# ============================================================================================
+
+titulo: La tortuga y la liebre
+autor: Fábula de Esopo
+descripcion: Una carrera muy desigual que enseña que la constancia vence a la prisa.
+portada: imagenes/portada.svg
+idioma: es
+orden: 2
+
+[personajes]
+narrador | nombre=Narrador | voz=es-EC-LuisNeural   | velocidad=-8%  | tono=+0Hz  | color=#2b8cf0 | emoji=📖
+liebre   | nombre=Liebre   | voz=es-CO-GonzaloNeural | velocidad=+12% | tono=+18Hz | color=#d6336c | emoji=🐇
+tortuga  | nombre=Tortuga  | voz=es-PE-CamilaNeural | velocidad=-22% | tono=-8Hz  | color=#1f9d55 | emoji=🐢
+zorro    | nombre=Zorro    | voz=es-AR-TomasNeural  | velocidad=-4%  | tono=-12Hz | color=#d9730d | emoji=🦊
+
+[pagina] imagen=imagenes/p1.svg
+narrador: En un prado lleno de flores vivía una liebre muy presumida.
+liebre: ¡Soy la más veloz de todo el bosque! Nadie puede correr como yo.
+
+[pagina] imagen=imagenes/p2.svg
+tortuga: Yo creo que puedo ganarte una carrera.
+liebre: ¡Ja, ja, ja! ¿Tú, la tortuga? ¡Si apenas caminas!
+zorro: Muy bien, amigos. Yo seré el juez. La meta está al final del camino.
+
+[pagina] imagen=imagenes/p3.svg
+zorro: ¿Listas? ¡Uno, dos, tres, ya!
+narrador: La liebre salió disparada, y la tortuga empezó a caminar despacito, paso a paso.
+
+[pagina] imagen=imagenes/p4.svg
+liebre: Voy tan adelante que puedo dormir una siesta bajo este árbol.
+narrador: La liebre cerró los ojos y se quedó profundamente dormida, mientras la tortuga seguía y seguía sin detenerse.
+
+[pagina] imagen=imagenes/p5.svg
+narrador: Cuando la liebre despertó, vio a la tortuga cruzando la meta.
+liebre: ¡No puede ser! ¡Perdí la carrera!
+zorro: ¡La ganadora es la tortuga!
+
+[pagina] imagen=imagenes/p6.svg
+tortuga: Despacio, pero sin parar, también se llega lejos.
+narrador: Moraleja: la constancia vale más que la prisa.

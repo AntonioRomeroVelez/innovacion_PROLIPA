@@ -1,0 +1,300 @@
+/* Cuentacuentos — estilos propios de la actividad (no se comparten con las de matemáticas).
+   ============ Tema (cambiar aquí para adaptar a la marca de la editorial) ============ */
+:root {
+  --azul-900: #0a3d7a;
+  --azul-700: #0f5cb8;
+  --azul-500: #2b8cf0;
+  --azul-200: #bcd8f8;
+  --azul-100: #e7f1fd;
+  --verde: #2fbf71;
+  --verde-sombra: #1d8f52;
+  --naranja: #ff9f1c;
+  --naranja-sombra: #c97800;
+  --gris: #8aa0ba;
+  --gris-sombra: #61778f;
+  --texto: #0e2a4d;
+  --fuente: "Fredoka", "Baloo 2", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  font-family: var(--fuente);
+  color: var(--texto);
+  background: repeating-conic-gradient(#e3eefb 0% 25%, #d6e6f8 0% 50%) 0 0 / 64px 64px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #f6faff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============ Barra superior ============ */
+.barra {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; background: #fff; border-bottom: 4px solid var(--azul-700);
+}
+.logo { display: block; height: 38px; width: auto; flex: none; margin-right: auto; }
+
+.pildora {
+  display: flex; align-items: center; gap: 8px; min-width: 0;
+  padding: 5px 14px 5px 5px; border-radius: 99px;
+  background: var(--verde); color: #fff; box-shadow: 0 3px 0 var(--verde-sombra);
+}
+.pildora-icono {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center; background: #fff; font-size: 1.1rem; line-height: 1;
+}
+.pildora-texto { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+.pildora-texto strong { font-size: .95rem; white-space: nowrap; }
+.pildora-texto small { font-size: .72rem; opacity: .92; white-space: nowrap; }
+@media (max-width: 479px) {
+  .barra:not([data-pantalla="pBiblioteca"]) .pildora { display: none; }
+}
+
+.btn-icono {
+  font: inherit; font-size: 1.3rem; width: 44px; height: 44px; border-radius: 50%;
+  border: 0; cursor: pointer; flex: none; background: var(--azul-100); color: var(--azul-900);
+}
+.btn-icono:active { transform: scale(.94); }
+
+/* ============ Pantallas ============ */
+.pantalla { flex: 1; padding: 12px 14px 22px; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+
+.tarjeta {
+  background: #fff; border-radius: 18px; padding: 14px 16px;
+  box-shadow: 0 2px 0 var(--azul-200), 0 6px 14px rgba(10, 61, 122, .08);
+}
+.tarjeta h2 { margin: 0 0 8px; font-size: 1.15rem; color: var(--azul-900); }
+.tarjeta p { margin: 0; line-height: 1.35; }
+
+.mascota-fila { display: flex; align-items: center; gap: 10px; }
+.mascota {
+  flex: none; width: 56px; height: 56px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--azul-700);
+  display: grid; place-items: center; font-size: 2rem;
+}
+.globo {
+  position: relative; flex: 1; min-height: 52px;
+  background: #fff; border: 2px solid var(--azul-500); border-radius: 16px;
+  padding: 8px 12px; font-size: 1rem; line-height: 1.25; font-weight: 500;
+  display: flex; align-items: center;
+}
+.globo::before {
+  content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px;
+  background: #fff; border-left: 2px solid var(--azul-500); border-bottom: 2px solid var(--azul-500);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.btn {
+  font: inherit; font-weight: 600; font-size: 1rem; color: #fff;
+  border: 0; border-radius: 14px; padding: 12px 16px; cursor: pointer;
+  box-shadow: 0 4px 0 var(--sombra, rgba(0,0,0,.25));
+  transition: transform .08s, box-shadow .08s, opacity .2s;
+}
+.btn:active:not([disabled]) { transform: translateY(3px); box-shadow: 0 1px 0 var(--sombra, rgba(0,0,0,.25)); }
+.btn.grande { font-size: 1.15rem; padding: 14px 20px; }
+.btn-verde { background: var(--verde); --sombra: var(--verde-sombra); }
+.btn-azul  { background: var(--azul-500); --sombra: var(--azul-900); }
+
+/* ============ Biblioteca de cuentos ============ */
+.estanteria { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+
+.tarjeta-cuento {
+  font: inherit; color: inherit; text-align: left; cursor: pointer; padding: 0; overflow: hidden;
+  background: #fff; border: 0; border-radius: 20px;
+  box-shadow: 0 3px 0 var(--azul-200), 0 8px 16px rgba(10, 61, 122, .12);
+  display: flex; flex-direction: column;
+  transition: transform .12s, box-shadow .12s;
+}
+.tarjeta-cuento:hover { transform: translateY(-2px); }
+.tarjeta-cuento:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--azul-200); }
+.portada { position: relative; aspect-ratio: 16 / 10; background: linear-gradient(#8ed6ff, #d9f3ff); overflow: hidden; }
+.portada img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.portada .boton-escuchar {
+  position: absolute; left: 10px; top: 10px;
+  background: var(--verde); color: #fff; font-weight: 700; padding: 6px 14px 6px 12px; border-radius: 99px;
+  box-shadow: 0 3px 0 var(--verde-sombra);
+}
+.tarjeta-info { padding: 10px 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+.tarjeta-info strong { font-size: 1.25rem; color: var(--azul-900); line-height: 1.15; }
+.tarjeta-info .autor { font-size: .85rem; color: var(--gris-sombra); }
+.tarjeta-info .resumen { font-size: .92rem; line-height: 1.3; margin-top: 2px; }
+.tarjeta-info .datos { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: .82rem; color: var(--gris-sombra); }
+.caras { display: flex; }
+.cara {
+  width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 1rem;
+  border: 2px solid var(--pc, var(--azul-500)); background: #fff; margin-left: -6px;
+}
+.cara:first-child { margin-left: 0; }
+
+/* ============ Lector ============ */
+/* En modo lector la página mide exactamente el alto de la pantalla: el texto se desplaza por dentro
+   y los controles quedan siempre a la vista. */
+.app.modo-lector { height: 100vh; height: 100dvh; overflow: hidden; }
+#pCuento { gap: 8px; padding-bottom: 12px; }
+
+.cuento-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.cuento-cab strong { font-size: 1.2rem; color: var(--azul-900); line-height: 1.15; }
+.cuento-cab small { flex: none; color: var(--gris-sombra); font-size: .85rem; font-weight: 500; }
+
+.puntos { display: flex; gap: 6px; justify-content: center; }
+.punto {
+  flex: 1; max-width: 46px; height: 10px; padding: 0; border: 0; border-radius: 99px; cursor: pointer;
+  background: #cfdff3; transition: background .2s, transform .2s;
+}
+.punto.hecha { background: var(--azul-500); }
+.punto.actual { background: var(--verde); transform: scaleY(1.4); }
+
+.ilustracion {
+  position: relative; flex: none; aspect-ratio: 16 / 10; width: 100%; max-height: 34vh; margin: 0 auto;
+  border-radius: 20px; overflow: hidden; background: #dbe9f8;
+  box-shadow: 0 3px 0 var(--azul-200), 0 8px 16px rgba(10, 61, 122, .14);
+}
+.ilustracion img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ilustracion-vacia {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-size: 4rem; background: linear-gradient(#8ed6ff, #d9f3ff);
+}
+.flecha {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
+  font: inherit; font-size: 1.8rem; line-height: 1; padding: 0 0 4px;
+  background: rgba(255, 255, 255, .85); color: var(--azul-900); box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+}
+.flecha.izq { left: 8px; }
+.flecha.der { right: 8px; }
+.flecha:active { transform: translateY(-50%) scale(.92); }
+.flecha[disabled] { opacity: .3; cursor: default; }
+
+/* Texto del cuento: una línea por intervención, con la cara y el color de su personaje */
+.texto {
+  position: relative; flex: 1; min-height: 120px; overflow-y: auto; overscroll-behavior: contain;
+  display: flex; flex-direction: column; gap: 8px; padding: 2px 2px 6px;
+  --tam: 1;
+}
+.linea { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; transition: opacity .25s; }
+.linea .cara {
+  flex: none; width: 40px; height: 40px; margin: 0; font-size: 1.3rem;
+  background: color-mix(in srgb, var(--pc) 16%, #fff);
+}
+.burbuja {
+  position: relative; flex: 1; min-width: 0; padding: 6px 12px 8px;
+  background: #fff; border: 3px solid var(--pc); border-radius: 18px;
+  transition: box-shadow .2s, background .2s;
+}
+.burbuja .nombre { display: block; font-size: .72rem; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--pc); line-height: 1.1; }
+.oracion { margin: 2px 0 0; font-size: calc(1.2rem * var(--tam)); line-height: 1.55; font-weight: 500; }
+
+/* El narrador va en una tarjeta suave, sin globo */
+.linea.narra .burbuja { background: #eef5ff; border-color: var(--azul-200); }
+.linea.narra .burbuja .nombre { color: var(--gris-sombra); }
+
+/* La línea que se está leyendo se destaca; las demás se atenúan un poco mientras suena */
+.linea.activa .burbuja {
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--pc) 28%, transparent);
+  background: color-mix(in srgb, var(--pc) 7%, #fff);
+}
+.linea.narra.activa .burbuja { background: #e1eeff; box-shadow: 0 0 0 5px rgba(43, 140, 240, .22); }
+.texto.leyendo .linea:not(.activa) { opacity: .62; }
+
+/* La palabra que se está diciendo se resalta; las que ya se dijeron cambian de color */
+.palabra {
+  display: inline-block; padding: 0 .12em; margin: 0 -.02em; border-radius: .36em; cursor: pointer;
+  transition: background .1s, color .1s, transform .1s;
+}
+.palabra.dicha { color: var(--pc-osc, var(--pc)); }
+.palabra.activa {
+  background: var(--pc); color: #fff; transform: scale(1.1);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .18);
+}
+@supports (color: color-mix(in srgb, red 50%, black)) {
+  .linea { --pc-osc: color-mix(in srgb, var(--pc) 72%, #000); }
+}
+
+/* ============ Controles ============ */
+.controles {
+  flex: none; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  background: #fff; border-radius: 22px; padding: 8px 12px;
+  box-shadow: 0 3px 0 var(--azul-200), 0 8px 16px rgba(10, 61, 122, .12);
+}
+.btn-ctl {
+  font: inherit; font-weight: 700; font-size: 1.05rem; min-width: 48px; height: 48px; padding: 0 10px;
+  border: 0; border-radius: 14px; cursor: pointer; background: var(--azul-100); color: var(--azul-900);
+}
+.btn-ctl:active { transform: scale(.94); }
+.btn-play {
+  font: inherit; font-size: 1.7rem; line-height: 1; width: 68px; height: 68px; border-radius: 50%;
+  border: 0; cursor: pointer; color: #fff; background: var(--verde);
+  box-shadow: 0 5px 0 var(--verde-sombra); padding: 0 0 0 4px; transition: transform .08s, box-shadow .08s;
+}
+.btn-play[aria-pressed="true"] { padding: 0; }
+.btn-play:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--verde-sombra); }
+
+/* ============ Fin del cuento ============ */
+.fin { text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; padding: 22px 16px; }
+.fin-emoji { font-size: 4rem; line-height: 1; }
+.fin h2 { font-size: 1.7rem; margin: 0; }
+.acciones-fin { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 8px; }
+
+/* ============ Avisos ============ */
+.aviso {
+  position: absolute; left: 14px; right: 14px; bottom: 104px; z-index: 20;
+  background: var(--azul-900); color: #fff; padding: 10px 14px; border-radius: 14px; text-align: center;
+  font-size: .95rem; box-shadow: 0 6px 16px rgba(0, 0, 0, .3);
+}
+
+/* ============ Accesibilidad ============ */
+button:focus-visible, .texto:focus-visible { outline: 4px solid var(--naranja); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+}
+
+/* ============ Pantallas anchas (computador, pizarra digital): se usa todo el ancho ============ */
+@media (min-width: 760px) {
+  .barra { padding: 10px 24px; }
+  .logo { height: 46px; }
+  .pantalla { padding: 16px 24px 24px; gap: 14px; }
+
+  /* Lector: la ilustración a la izquierda y el texto a la derecha, controles abajo en toda la fila */
+  #pCuento {
+    display: grid; gap: 10px 24px; padding-bottom: 16px;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: "cab cab" "puntos puntos" "ilu texto" "ctl ctl";
+  }
+  #pCuento .cuento-cab { grid-area: cab; }
+  #pCuento .puntos { grid-area: puntos; }
+  #pCuento .puntos .punto { max-width: none; }
+  #pCuento .ilustracion { grid-area: ilu; aspect-ratio: auto; max-height: none; height: 100%; min-height: 0; }
+  #pCuento .texto { grid-area: texto; min-height: 0; gap: 12px; padding-right: 6px; }
+  #pCuento .controles { grid-area: ctl; width: min(100%, 720px); margin: 0 auto; }
+  .cuento-cab strong { font-size: 1.5rem; }
+  .oracion { font-size: calc(clamp(1.3rem, 1.1rem + .9vw, 1.9rem) * var(--tam)); }
+  .linea .cara { width: 48px; height: 48px; font-size: 1.6rem; }
+  .aviso { left: 50%; right: auto; width: min(90%, 480px); transform: translateX(-50%); }
+
+  .fin { padding: 36px 24px; }
+  .acciones-fin { flex-direction: row; justify-content: center; }
+  .acciones-fin .btn { flex: 0 1 280px; }
+  #pFin .tarjeta.fin { width: min(100%, 640px); margin: auto; }
+}
+@media (min-width: 760px) and (max-height: 600px) {
+  #pCuento { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+}
+
+@media (max-width: 380px) {
+  .logo { height: 34px; }
+  .pildora-texto small { display: none; }
+  .oracion { font-size: calc(1.1rem * var(--tam)); }
+}

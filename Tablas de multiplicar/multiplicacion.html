@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ábaco de multiplicar · Prolipa</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <canvas id="confeti" aria-hidden="true"></canvas>
+
+  <main class="app" id="app">
+    <header class="barra" id="barra" data-pantalla="pInicio">
+      <button class="btn-icono" id="btnInicio" aria-label="Volver al inicio" hidden>🏠</button>
+      <img class="logo" src="img/logo-prolipa.png" width="738" height="252" alt="Prolipa, vanguardia en educación">
+      <div class="pildora">
+        <span class="pildora-icono" aria-hidden="true">×</span>
+        <span class="pildora-texto"><strong>Multiplicación</strong><small>Ábaco · tablas del 1 al 10</small></span>
+      </div>
+      <button class="btn-icono" id="btnSonido" aria-label="Activar o silenciar el sonido">🔊</button>
+    </header>
+
+    <!-- ============ INICIO ============ -->
+    <section class="pantalla" id="pInicio">
+      <div class="mascota-fila">
+        <div class="mascota" aria-hidden="true">🐼</div>
+        <div class="globo">¡Hola! Vamos a aprender las tablas de multiplicar pintando en un ábaco.</div>
+      </div>
+
+      <div class="tarjeta">
+        <h2>¿Qué tablas quieres practicar?</h2>
+        <div class="fichas" id="fichas" role="group" aria-label="Elige las tablas"></div>
+      </div>
+
+      <div class="tarjeta pasos">
+        <h2>¿Cómo se juega?</h2>
+        <ol>
+          <li><b>Mira</b> la multiplicación, por ejemplo <b>7 × 8</b>.</li>
+          <li><b>Pinta</b> con el dedo o el mouse: <b>7 filas</b> hacia abajo y <b>8 cuentas</b> hacia el lado (¡o al revés!).</li>
+          <li><b>Elige</b> el resultado.</li>
+        </ol>
+      </div>
+
+      <div class="acciones-inicio">
+        <button class="btn btn-verde grande" id="btnJugar">▶ Jugar</button>
+        <button class="btn btn-azul" id="btnExplorar">🧮 Explorar el ábaco</button>
+      </div>
+    </section>
+
+    <!-- ============ JUEGO / EXPLORAR ============ -->
+    <section class="pantalla" id="pJuego" hidden data-modo="jugar">
+      <div class="hud solo-jugar">
+        <div class="hud-item"><span>Puntos</span><b id="puntos">0</b></div>
+        <div class="progreso-wrap">
+          <div class="progreso" role="progressbar" aria-label="Progreso de la ronda"><div class="progreso-barra" id="progreso"></div></div>
+          <small id="progresoTxt">1 / 10</small>
+        </div>
+        <div class="hud-item"><span>Racha</span><b>🔥 <span id="racha">0</span></b></div>
+      </div>
+
+      <div class="fila-pregunta">
+        <div class="medallon solo-jugar" id="medallon"></div>
+        <div class="globo" aria-live="polite">
+          <span class="globo-mascota" aria-hidden="true">🐼</span>
+          <span id="mensaje"></span>
+        </div>
+      </div>
+
+      <div id="tablero"></div>
+
+      <!-- Controles del juego: en pantallas grandes van en una columna a la derecha del ábaco -->
+      <div class="controles">
+      <!-- Herramientas de pintura (se ocultan al terminar la pregunta) -->
+      <div class="herramientas" id="herramientas">
+        <div class="segmento" role="group" aria-label="Herramienta">
+          <button class="seg" id="herrLapiz" aria-pressed="true" title="Pinta cuenta por cuenta, pasando el dedo o el mouse">✏️ Pintar</button>
+          <button class="seg" id="herrRect" aria-pressed="false" title="Arrastra de una esquina a la opuesta y se pinta todo el rectángulo">▭ Rectángulo</button>
+        </div>
+        <button class="btn btn-gris chico" id="btnReiniciar">↺ Borrar</button>
+      </div>
+
+      <!-- Teclado para escribir la respuesta en el recuadro de debajo del ábaco -->
+      <div class="teclado solo-jugar" id="teclado" role="group" aria-label="Teclado de números"></div>
+
+      <!-- Panel: pintar y comprobar -->
+      <div class="panel solo-jugar" id="panelConstruir">
+        <button class="btn btn-naranja" id="btnPista">💡 Pista</button>
+        <button class="btn btn-verde grande" id="btnComprobar">✔ Comprobar</button>
+      </div>
+
+      <!-- Panel: seguir con la siguiente pregunta -->
+      <div class="panel solo-jugar" id="panelSiguiente" hidden>
+        <button class="btn btn-verde grande" id="btnSiguiente" hidden>Siguiente ▶</button>
+      </div>
+
+      <!-- Panel: explorar -->
+      <div class="panel panel-explorar solo-explorar" id="panelExplorar">
+        <div class="selector">
+          <div class="paso-num">
+            <button class="btn-mini" data-factor="a" data-delta="-1" aria-label="Quitar una fila">−</button>
+            <output id="valA">3</output>
+            <button class="btn-mini" data-factor="a" data-delta="1" aria-label="Agregar una fila">+</button>
+          </div>
+          <span class="por">×</span>
+          <div class="paso-num">
+            <button class="btn-mini" data-factor="b" data-delta="-1" aria-label="Quitar una columna">−</button>
+            <output id="valB">4</output>
+            <button class="btn-mini" data-factor="b" data-delta="1" aria-label="Agregar una columna">+</button>
+          </div>
+        </div>
+        <div class="selector-botones">
+          <button class="btn btn-azul" id="btnMostrar">✨ Muéstramelo</button>
+          <button class="btn btn-naranja" id="btnGirar">↻ Girar</button>
+        </div>
+        <div class="lectura" aria-live="polite">
+          <div class="lectura-ecuacion" id="lecEcuacion">Pinta en el ábaco</div>
+          <div class="lectura-suma" id="lecSuma"></div>
+        </div>
+      </div>
+      </div><!-- /controles -->
+    </section>
+
+    <!-- ============ FIN ============ -->
+    <section class="pantalla" id="pFin" hidden>
+      <div class="tarjeta fin">
+        <div class="estrellas" id="estrellas" aria-hidden="true"></div>
+        <h2 id="finTitulo">¡Excelente!</h2>
+        <p id="finResumen"></p>
+        <div id="repaso" class="repaso" hidden>
+          <h3>Para repasar</h3>
+          <div class="repaso-lista" id="repasoLista"></div>
+        </div>
+        <div class="acciones-fin">
+          <button class="btn btn-verde grande" id="btnOtra">▶ Jugar otra vez</button>
+          <button class="btn btn-azul" id="btnCambiar">Cambiar tablas</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/efectos.js"></script>
+  <script src="js/abaco.js"></script>
+  <script src="js/juego.js"></script>
+</body>
+</html>

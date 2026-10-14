@@ -1,0 +1,439 @@
+/* ============ Tema (cambiar aquí para adaptar a la marca de la editorial) ============ */
+:root {
+  --azul-900: #0a3d7a;
+  --azul-700: #0f5cb8;
+  --azul-500: #2b8cf0;
+  --azul-200: #bcd8f8;
+  --azul-100: #e7f1fd;
+  --verde: #2fbf71;
+  --verde-sombra: #1d8f52;
+  --naranja: #ff9f1c;
+  --naranja-sombra: #c97800;
+  --rojo: #e5484d;
+  --gris: #8aa0ba;
+  --gris-sombra: #61778f;
+  --texto: #0e2a4d;
+  --color-corchete: #a9b2bd;  /* corchetes de filas y columnas: gris plateado, para no competir con los colores de las cuentas */
+  --color-insignia: #7d8996;  /* círculo con el número del corchete (un poco más oscuro para que se lea el número blanco) */
+  --fruta: url("../img/frutas/manzana.png"); /* el dibujo de las cuentas; el juego lo cambia en cada pregunta */
+  --fuente: "Fredoka", "Baloo 2", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  font-family: var(--fuente);
+  color: var(--texto);
+  background: repeating-conic-gradient(#e3eefb 0% 25%, #d6e6f8 0% 50%) 0 0 / 64px 64px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  max-width: 600px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: #f6faff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(10, 61, 122, .25);
+}
+
+/* ============ Barra superior ============ */
+.barra {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #fff;
+  border-bottom: 4px solid var(--azul-700);
+}
+/* Logo de la editorial (img/logo-prolipa.png) */
+.logo { display: block; height: 38px; width: auto; flex: none; margin-right: auto; }
+
+/* Etiqueta verde con el nombre de la actividad (como en las demás actividades de la editorial) */
+.pildora {
+  display: flex; align-items: center; gap: 8px; min-width: 0;
+  padding: 5px 14px 5px 5px; border-radius: 99px;
+  background: var(--verde); color: #fff;
+  box-shadow: 0 3px 0 var(--verde-sombra);
+}
+.pildora-icono {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: #fff; color: var(--verde-sombra); font-weight: 700; font-size: 1.35rem; line-height: 1;
+}
+.pildora-texto { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+.pildora-texto strong { font-size: .95rem; white-space: nowrap; }
+.pildora-texto small { font-size: .72rem; opacity: .92; white-space: nowrap; }
+
+/* En pantallas angostas, durante el juego la etiqueta se oculta para dejar sitio al botón de inicio */
+@media (max-width: 479px) {
+  .barra:not([data-pantalla="pInicio"]) .pildora { display: none; }
+}
+
+.btn-icono {
+  font: inherit; font-size: 1.3rem;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 0; cursor: pointer; flex: none;
+  background: var(--azul-100); color: var(--azul-900);
+}
+.btn-icono:active { transform: scale(.94); }
+
+/* ============ Pantallas ============ */
+.pantalla { flex: 1; padding: 12px 14px 22px; display: flex; flex-direction: column; gap: 10px; }
+
+.tarjeta {
+  background: #fff; border-radius: 18px; padding: 14px 16px;
+  box-shadow: 0 2px 0 var(--azul-200), 0 6px 14px rgba(10, 61, 122, .08);
+}
+.tarjeta h2 { margin: 0 0 10px; font-size: 1.15rem; color: var(--azul-900); }
+
+/* Mascota + globo de texto */
+.mascota-fila { display: flex; align-items: center; gap: 10px; }
+.mascota {
+  flex: none; width: 56px; height: 56px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--azul-700);
+  display: grid; place-items: center; font-size: 2rem;
+}
+.globo {
+  position: relative; flex: 1; min-height: 52px;
+  background: #fff; border: 2px solid var(--azul-500); border-radius: 16px;
+  padding: 8px 12px; font-size: 1rem; line-height: 1.25; font-weight: 500;
+  display: flex; align-items: center;
+}
+.globo::before {
+  content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px;
+  background: #fff; border-left: 2px solid var(--azul-500); border-bottom: 2px solid var(--azul-500);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/* ============ Botones ============ */
+.btn {
+  font: inherit; font-weight: 600; font-size: 1rem; color: #fff;
+  border: 0; border-radius: 14px; padding: 12px 16px; cursor: pointer;
+  box-shadow: 0 4px 0 var(--sombra, rgba(0,0,0,.25));
+  transition: transform .08s, box-shadow .08s, opacity .2s;
+}
+.btn:active:not([disabled]) { transform: translateY(3px); box-shadow: 0 1px 0 var(--sombra, rgba(0,0,0,.25)); }
+.btn[disabled] { opacity: .5; cursor: default; }
+.btn.grande { font-size: 1.15rem; padding: 14px 20px; }
+.btn.chico { font-size: .95rem; padding: 10px 14px; }
+.btn-verde   { background: var(--verde);   --sombra: var(--verde-sombra); }
+.btn-azul    { background: var(--azul-500); --sombra: var(--azul-900); }
+.btn-naranja { background: var(--naranja); --sombra: var(--naranja-sombra); }
+.btn-gris    { background: var(--gris);    --sombra: var(--gris-sombra); }
+
+.btn-mini {
+  font: inherit; font-weight: 700; font-size: 1.5rem; line-height: 1;
+  width: 44px; height: 44px; border-radius: 12px; border: 0; cursor: pointer;
+  background: var(--azul-500); color: #fff; box-shadow: 0 3px 0 var(--azul-900);
+}
+.btn-mini:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--azul-900); }
+
+/* ============ Inicio ============ */
+.fichas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.ficha {
+  font: inherit; font-weight: 700; font-size: 1.4rem;
+  height: 52px; border-radius: 14px; cursor: pointer;
+  background: var(--azul-100); color: var(--azul-900);
+  border: 3px solid var(--azul-200);
+  transition: transform .1s, background .15s;
+}
+.ficha[aria-pressed="true"] { background: var(--azul-700); border-color: var(--azul-900); color: #fff; transform: translateY(-2px); }
+.ficha.todas { grid-column: span 5; font-size: 1.05rem; }
+
+.pasos ol { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; line-height: 1.3; }
+.acciones-inicio { display: flex; flex-direction: column; gap: 10px; }
+
+/* ============ HUD ============ */
+.hud { display: flex; align-items: center; gap: 12px; }
+.hud-item { display: flex; flex-direction: column; align-items: center; line-height: 1.05; min-width: 62px; }
+.hud-item span { font-size: .72rem; color: var(--gris-sombra); text-transform: uppercase; letter-spacing: .04em; }
+.hud-item b { font-size: 1.35rem; color: var(--azul-900); }
+.progreso-wrap { flex: 1; display: flex; flex-direction: column; gap: 2px; align-items: stretch; }
+.progreso-wrap small { text-align: center; color: var(--gris-sombra); font-size: .75rem; }
+.progreso { height: 14px; border-radius: 99px; background: #cfdff3; overflow: hidden; box-shadow: inset 0 2px 3px rgba(0,0,0,.15); }
+.progreso-barra { height: 100%; width: 0; background: linear-gradient(#69bcff, #1f7ae0); border-radius: 99px; transition: width .4s ease; }
+.pulso { animation: pulso .35s ease; }
+@keyframes pulso { 50% { transform: scale(1.3); } }
+
+/* ============ Tarjeta de pregunta ============ */
+.fila-pregunta { display: flex; align-items: center; gap: 14px; }
+.medallon {
+  flex: none; min-width: 96px; height: 96px; padding: 0 10px; border-radius: 50%;
+  display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 1.75rem; white-space: nowrap;
+  background: radial-gradient(circle at 35% 28%, #5db1ff, #0f5cb8 68%);
+  border: 6px solid #fff;
+  box-shadow: 0 0 0 5px var(--azul-900), 0 8px 14px rgba(10, 61, 122, .35);
+}
+.fila-pregunta .globo { gap: 8px; min-height: 64px; }
+.globo-mascota { flex: none; font-size: 1.8rem; line-height: 1; }
+#pJuego[data-modo="explorar"] .fila-pregunta .globo::before { display: none; }
+
+/* ============ Tablero del ábaco (cuadrícula para pintar) ============ */
+.tablero {
+  --b: 28px;  /* alto de cada casilla */
+  --bw: 28px; /* ancho de cada casilla: en pantallas grandes es mayor que el alto, para que el ábaco ocupe todo el ancho */
+  padding: 10px;
+  border-radius: 22px;
+  background: linear-gradient(#1b6fd0, #0a3d7a);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .18), 0 6px 0 #082f5f;
+}
+.tablero-interior {
+  padding: 12px 8px;
+  border-radius: 14px;
+  background: repeating-conic-gradient(#f3f8fe 0% 25%, #e3eefb 0% 50%) 0 0 / 56px 56px;
+}
+
+/* marco: [corchete | cuadrícula] × [corchete | cuadrícula]. Sin números.
+   La banda de los corchetes mide 0 cuando están ocultos (modo jugar). */
+.marco {
+  display: grid;
+  width: max-content;
+  margin: 0 auto;
+  grid-template-columns: calc(var(--b) * var(--banda, 0)) calc(var(--bw) * var(--nc));
+  grid-template-rows: calc(var(--b) * var(--banda, 0)) calc(var(--b) * var(--nf));
+  --r0: 0; --c0: 0; --kr: 1; --kc: 1;
+}
+.tablero[data-corchetes="0"] .corchete { display: none; }
+
+/* Corchetes (modo explorar): aparecen cuando lo pintado forma un rectángulo */
+.corchete { position: relative; }
+.corchete-h { grid-area: 1 / 2; --col: var(--color-corchete); }
+.corchete-v { grid-area: 2 / 1; --col: var(--color-corchete); }
+.corchete .linea {
+  position: absolute;
+  border: 3px solid var(--col);
+  opacity: 0; transform: scale(.8);
+  transition: left .25s ease, top .25s ease, width .25s ease, height .25s ease,
+              opacity .25s ease, transform .35s cubic-bezier(.3, 1.6, .5, 1);
+  pointer-events: none;
+}
+.marco[data-rect="1"] .linea { opacity: 1; transform: none; }
+.corchete-h .linea {
+  left: calc(var(--c0) * var(--bw) + 3px);
+  width: calc(var(--kc) * var(--bw) - 6px);
+  bottom: 2px; height: calc(var(--b) * .3);
+  border-bottom: 0; border-radius: 8px 8px 0 0;
+}
+.corchete-v .linea {
+  top: calc(var(--r0) * var(--b) + 3px);
+  height: calc(var(--kr) * var(--b) - 6px);
+  right: 2px; width: calc(var(--b) * .3);
+  border-right: 0; border-radius: 8px 0 0 8px;
+}
+.insignia {
+  position: absolute; display: grid; place-items: center;
+  width: calc(var(--b) * .68); height: calc(var(--b) * .68); border-radius: 50%;
+  background: var(--color-insignia); color: #fff; font-weight: 700; font-size: calc(var(--b) * .42);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, .3);
+}
+.corchete-h .insignia { left: 50%; top: 0; transform: translate(-50%, -50%); }
+.corchete-v .insignia { left: 0; top: 50%; transform: translate(-50%, -50%); }
+
+/* Cuadrícula de círculos */
+.cuadricula {
+  grid-area: 2 / 2;
+  display: grid;
+  grid-template-columns: repeat(var(--nc), var(--bw));
+  grid-auto-rows: var(--b);
+  background: rgba(255, 255, 255, .7);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(15, 92, 184, .28);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: crosshair;
+}
+.tablero.bloqueado .cuadricula { cursor: default; }
+
+.cuadro {
+  position: relative;
+  border-right: 1px solid rgba(15, 92, 184, .15);
+  border-bottom: 1px solid rgba(15, 92, 184, .15);
+}
+.cuadro[data-c="4"] { border-right: 2px solid rgba(15, 92, 184, .45); } /* grupos de 5 */
+.cuadro[data-r="4"] { border-bottom: 2px solid rgba(15, 92, 184, .45); }
+.cuadro::before { /* el "hueco" vacío */
+  content: ""; position: absolute; inset: 0; margin: auto; border-radius: 50%;
+  width: calc(min(var(--bw), var(--b)) * .52); height: calc(min(var(--bw), var(--b)) * .52);
+  background: radial-gradient(circle at 40% 35%, rgba(15, 92, 184, .08), rgba(15, 92, 184, .22));
+  box-shadow: inset 0 1px 2px rgba(15, 92, 184, .25);
+}
+
+.cuenta { /* disco suave del color de la fila, con la fruta encima */
+  position: absolute; inset: 0; margin: auto; border-radius: 50%; pointer-events: none;
+  width: calc(min(var(--bw), var(--b)) * .88); height: calc(min(var(--bw), var(--b)) * .88);
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--c2) 26%, #fff);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--c2) 75%, transparent), 0 2px 3px rgba(0, 0, 0, .25);
+  transform: scale(0);
+  transition: transform .26s cubic-bezier(.3, 1.8, .5, 1);
+}
+.cuenta::after {
+  content: ""; position: absolute; inset: 9%; pointer-events: none;
+  background: var(--fruta) center / contain no-repeat;
+}
+.lleno .cuenta { transform: scale(1); }
+/* Número de conteo dentro de cada cuenta: el más alto es el resultado total */
+.num {
+  display: none; /* sin números: se cuentan las frutas */
+  font-weight: 700; line-height: 1; color: #fff;
+  font-size: calc(var(--b) * .38);
+  text-shadow: 0 0 2px rgba(0, 0, 0, .75), 0 1px 2px rgba(0, 0, 0, .6); /* se lee también sobre amarillo y verde claro */
+  user-select: none; -webkit-user-select: none;
+}
+.num.n3 { font-size: calc(var(--b) * .3); letter-spacing: -.03em; } /* "100": tres cifras */
+.cuenta.salta { animation: salto .6s ease both; }
+@keyframes salto { 0%, 100% { translate: 0 0; } 40% { translate: 0 -38%; } }
+
+.fantasma {
+  position: absolute; inset: 0; margin: auto; border-radius: 50%; pointer-events: none;
+  width: calc(min(var(--bw), var(--b)) * .8); height: calc(min(var(--bw), var(--b)) * .8);
+  border: 2px dashed var(--azul-500);
+  opacity: 0; transition: opacity .2s;
+}
+.fantasma.ver { opacity: .95; animation: latido 1.2s ease-in-out infinite; }
+@keyframes latido { 50% { transform: scale(1.1); } }
+
+/* ============ Herramientas y paneles ============ */
+.herramientas { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.segmento { display: flex; border-radius: 14px; overflow: hidden; box-shadow: 0 3px 0 var(--azul-900); }
+.seg {
+  font: inherit; font-weight: 600; font-size: .95rem; border: 0; cursor: pointer;
+  padding: 10px 14px; background: var(--azul-100); color: var(--azul-900);
+}
+.seg[aria-pressed="true"] { background: var(--azul-700); color: #fff; }
+
+.panel { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.panel .grande { flex: 1; min-width: 150px; }
+@keyframes sacudir { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+
+/* Explorar */
+.panel-explorar { flex-direction: column; align-items: stretch; gap: 12px; }
+.selector { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.paso-num { display: flex; align-items: center; gap: 8px; }
+.paso-num output { min-width: 2ch; text-align: center; font-size: 2rem; font-weight: 700; color: var(--azul-900); }
+.por { font-size: 2rem; font-weight: 700; color: var(--azul-700); }
+.selector-botones { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.lectura { background: #fff; border-radius: 16px; padding: 12px 14px; text-align: center; min-height: 112px;
+  box-shadow: 0 2px 0 var(--azul-200); display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+.lectura-ecuacion { font-size: 1.9rem; font-weight: 700; color: var(--azul-900); }
+.lectura-suma { font-size: 1.1rem; color: var(--azul-700); font-weight: 500; word-break: break-word; }
+
+/* ============ Pantalla final ============ */
+.fin { text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.estrellas { font-size: 3rem; letter-spacing: .1em; }
+.estrellas span { display: inline-block; animation: aparece .5s cubic-bezier(.3, 1.6, .5, 1) both; }
+@keyframes aparece { from { transform: scale(0) rotate(-40deg); } to { transform: scale(1) rotate(0); } }
+.fin h2 { font-size: 1.6rem; margin: 0; }
+.fin p { margin: 0; font-size: 1.05rem; }
+.repaso h3 { margin: 6px 0; font-size: 1rem; color: var(--gris-sombra); }
+.repaso-lista { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.repaso-lista span { background: var(--azul-100); border: 2px solid var(--azul-200); border-radius: 12px; padding: 4px 10px; font-weight: 600; }
+.acciones-fin { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 6px; }
+
+/* ============ Encabezado de pestañas (mismo diseño que la suma y la resta) ============
+   Una fila de pestañas centrada, sin el oso: el primer número (naranja), el signo y el segundo (azul). Jugando, el
+   mensaje (avisos, pistas, felicitaciones) aparece un momento EN EL MISMO LUGAR de las pestañas, que se esconden
+   mientras tanto, y después desaparece. La instrucción inicial de cada pregunta no se muestra. */
+.fila-pregunta { flex-direction: column; align-items: stretch; gap: 0; position: relative; }
+.medallon {
+  min-width: 0; height: auto; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
+  align-self: center; display: flex; align-items: center; gap: 6px;
+}
+.medallon .mb {
+  padding: 5px 24px; border: 3px solid var(--azul-900); border-radius: 16px; font-size: 1.6rem; line-height: 1.15;
+  color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
+}
+.medallon .mb.a { background: linear-gradient(#ffc58a, #f08a24 70%); }
+.medallon .mb.b { background: linear-gradient(#9ccaff, #2f7fe0 70%); }
+.medallon .op {
+  padding: 1px 10px 0; border: 3px solid var(--azul-900); border-radius: 12px;
+  background: #ffd23f; color: var(--azul-900); font-size: 1.3rem; line-height: 1.2;
+}
+.fila-pregunta .globo {
+  flex: none; min-height: 0; padding: 12px 14px; font-size: .98rem; color: var(--azul-900);
+  background: #fffbea; border: 3px solid var(--azul-900); border-radius: 16px;
+  justify-content: center; text-align: center;
+  box-shadow: 0 4px 0 rgba(10, 61, 122, .2);
+}
+.fila-pregunta .globo::before, .globo-mascota { display: none; }
+#pJuego[data-modo="jugar"] .fila-pregunta { min-height: 66px; justify-content: center; } /* sitio para 2 líneas de texto */
+#pJuego[data-modo="jugar"] .medallon { transition: opacity .2s; }
+#pJuego[data-modo="jugar"] .fila-pregunta.con-aviso .medallon { opacity: 0; }
+#pJuego[data-modo="jugar"] .fila-pregunta .globo {
+  position: absolute; inset: 0; z-index: 30; pointer-events: none; padding: 6px 12px; font-size: .94rem; line-height: 1.2;
+  opacity: 0; transition: opacity .2s;
+}
+#pJuego[data-modo="jugar"] .fila-pregunta .globo.aviso { opacity: 1; }
+
+/* Respuesta: "7 × 8 = [ ]" debajo del ábaco, y el teclado numérico */
+.fila-resp { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 14px; }
+.ecuacion-grupo { display: flex; align-items: center; gap: 8px; font-size: 2rem; font-weight: 700; color: var(--azul-900); white-space: nowrap; }
+.ecuacion-grupo .n-a { color: #b25a0a; }
+.ecuacion-grupo .n-b { color: #164f9e; }
+.resp-caja {
+  font: inherit; font-weight: 700; font-size: 2.4rem; line-height: 1; color: var(--azul-900);
+  width: auto; min-width: 130px; height: 68px; padding: 0 12px;
+  display: grid; place-items: center; cursor: pointer;
+  border-radius: 12px; border: 3px solid var(--naranja); background: #fff; box-shadow: 0 0 0 4px rgba(255, 159, 28, .35);
+}
+.resp-caja:empty::before { content: "?"; opacity: .3; }
+.resp-caja.mal { border-color: var(--rojo); color: var(--rojo); box-shadow: none; animation: sacudir .35s ease; }
+.resp-caja.bien { border-color: var(--verde-sombra); background: var(--verde); color: #fff; box-shadow: none; }
+#pJuego[data-modo="explorar"] .fila-resp { display: none; }
+
+.teclado { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 320px; margin: 0 auto; }
+.tecla {
+  font: inherit; font-weight: 700; font-size: 1.6rem; height: 54px; border-radius: 12px; border: 0; cursor: pointer;
+  background: var(--azul-500); color: #fff; box-shadow: 0 3px 0 var(--azul-900);
+}
+.tecla:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--azul-900); }
+.tecla:nth-child(10) { grid-column: span 2; } /* el 0 es ancho, como en una calculadora */
+.tecla.borrar { background: var(--gris); box-shadow: 0 3px 0 var(--gris-sombra); }
+.tecla.borrar:active { box-shadow: 0 1px 0 var(--gris-sombra); }
+@media (max-width: 479px) { /* en celular el teclado es más bajo para que todo quepa en pantalla */
+  .teclado { gap: 6px; max-width: 280px; }
+  .tecla { height: 40px; font-size: 1.3rem; }
+}
+
+/* ============ Modo explorar vs. jugar ============ */
+#pJuego[data-modo="jugar"] .solo-explorar { display: none; }
+#pJuego[data-modo="explorar"] .solo-jugar { display: none; }
+
+/* ============ Confeti ============ */
+#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+
+/* ============ Pantallas grandes (computador, tableta horizontal) ============
+   El juego usa todo el ancho: el ábaco a la izquierda y los controles (herramientas, teclado, botones) a la derecha.
+   En celular los controles se quedan debajo, como siempre (display: contents). */
+.controles { display: contents; }
+@media (min-width: 900px) {
+  .app { max-width: 1200px; }
+  #pInicio, #pFin { width: 100%; max-width: 640px; margin: 0 auto; }
+  #pJuego { display: grid; grid-template-columns: minmax(0, 1fr) 380px; column-gap: 24px; row-gap: 12px; align-content: start; padding: 16px 28px 28px; }
+  #pJuego > .hud { grid-column: 1 / -1; }
+  #pJuego > .fila-pregunta, #pJuego > #tablero { grid-column: 1; }
+  #pJuego > .controles { grid-column: 2; display: flex; flex-direction: column; gap: 12px; align-self: start; }
+  #pJuego[data-modo="jugar"] > .controles { grid-row: 2 / span 2; }
+  #pJuego[data-modo="explorar"] > .controles { grid-row: 1 / span 2; }
+}
+
+/* ============ Accesibilidad ============ */
+button:focus-visible { outline: 4px solid var(--naranja); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+}
+
+/* Pantallas muy angostas */
+@media (max-width: 380px) {
+  .medallon { min-width: 84px; height: 84px; font-size: 1.5rem; }
+  .pildora-texto small { display: none; }
+  .logo { height: 34px; }
+}

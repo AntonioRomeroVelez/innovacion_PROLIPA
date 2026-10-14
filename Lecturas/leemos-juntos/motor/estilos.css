@@ -1,0 +1,313 @@
+/* =============================================================
+   ESTILOS.CSS — Leemos juntos
+   ============================================================= */
+:root {
+  --tinta:   #2b2d42;
+  --papel:   #fffaf0;
+  --oro:     #ffcf4d;
+  --naranja: #ff8a3d;
+  --verde:   #2fbf71;
+  --rojo:    #ef476f;
+  --azul:    #4361ee;
+  --lila:    #7b5cff;
+  --sombra:  0 8px 24px rgba(30, 40, 90, .18);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--tinta);
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  background: linear-gradient(180deg, #cfe9ff 0%, #f3e6ff 60%, #fde8ef 100%);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 12px 14px 40px;
+  display: grid;
+  gap: 12px;
+}
+.app[data-estado="portada"] > *:not(.cabecera):not(.escenario) { visibility: hidden; }
+
+/* ---------- cabecera ---------- */
+.cabecera { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.unidad { display: block; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #6b5fb5; font-weight: 700; }
+h1 { margin: 0; font-size: clamp(20px, 3.4vw, 30px); }
+.modo {
+  font-size: 13px; background: #fff; border: 2px solid #d9d4ff; border-radius: 999px;
+  padding: 5px 13px; max-width: 100%;
+}
+.modo:empty { display: none; }
+
+/* ---------- escenario ---------- */
+.escenario {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  /* nunca más alto que la mitad de la pantalla, pero sin recortar el dibujo:
+     si falta altura, se achica el ancho y se conserva la proporción */
+  width: min(100%, calc(50vh * 16 / 9));
+  margin-inline: auto;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 4px solid #fff;
+  box-shadow: var(--sombra);
+  background: #8cc8ff;
+}
+#lienzo { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lugar {
+  position: absolute; left: 12px; top: 12px;
+  background: rgba(255,255,255,.9); padding: 6px 14px; border-radius: 999px;
+  font-weight: 700; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.lugar:not(:empty)::before { content: "📍 "; }
+
+/* ---------- el SVG: lugares y personaje ---------- */
+.esc { opacity: 0; transition: opacity 1.4s ease; }
+.esc.activa { opacity: 1; }
+
+.deriva { animation: deriva linear infinite; }
+@keyframes deriva { from { transform: translateX(-200px); } to { transform: translateX(1160px); } }
+
+.polvo  { animation: flota ease-in-out infinite alternate; }
+@keyframes flota { from { transform: translate(0,0); opacity: .15; } to { transform: translate(16px,-26px); opacity: .9; } }
+.titila { animation: titila 2.6s ease-in-out infinite; }
+@keyframes titila { 50% { opacity: .2; } }
+.ave    { animation: vuela 28s linear infinite; }
+@keyframes vuela { from { transform: translate(-90px,150px); } to { transform: translate(1050px,70px); } }
+.gota   { stroke: rgba(255,255,255,.75); stroke-width: 2; animation: cae linear infinite; }
+@keyframes cae { from { transform: translate(0,0); } to { transform: translate(-45px,620px); } }
+.olas   { animation: ola 5s ease-in-out infinite alternate; }
+.olas.lenta { animation-duration: 8s; animation-direction: alternate-reverse; }
+.ondas  { animation: ola 4s ease-in-out infinite alternate; }
+@keyframes ola { from { transform: translateX(0); } to { transform: translateX(-80px); } }
+
+#viajera-pos { transition: transform 2.6s cubic-bezier(.45,.05,.25,1); }
+.vaiven { animation: vaiven 4.8s ease-in-out infinite alternate; transform-origin: 0 -240px; }
+@keyframes vaiven { from { transform: rotate(-3deg) translateY(0); } to { transform: rotate(3deg) translateY(-8px); } }
+.domo { transform-origin: 0 -150px; transition: transform 1.5s cubic-bezier(.3,1.3,.5,1); }
+#viajera.cerrado .domo { transform: scale(1, .05); }
+#viajera.media   .domo { transform: scale(1, .45); }
+#viajera .cuerdas { transition: opacity 1s; }
+#viajera.cerrado .cuerdas { opacity: 0; }
+#viajera.cerrado .vaiven { animation-play-state: paused; }
+#viajera .sombra { transition: opacity 1s; opacity: 0; }
+#viajera.cerrado .sombra { opacity: 1; }
+.coleta { animation: coleta 1.2s ease-in-out infinite alternate; transform-origin: 14px -92px; }
+@keyframes coleta { from { transform: rotate(-8deg); } to { transform: rotate(10deg); } }
+.paginas { animation: aletea 1.6s ease-in-out infinite alternate; transform-origin: 0 4px; }
+@keyframes aletea { from { transform: scaleY(.7); } to { transform: scaleY(1.1); } }
+#viajera.cerrado .paginas { animation: none; transform: scaleY(.15); }
+#viajera.salto .mia { animation: salto .9s ease-out; }
+@keyframes salto { 30% { transform: translateY(-34px); } 60% { transform: translateY(0); } 80% { transform: translateY(-12px); } }
+.chispa { animation: chispa 1s ease-out forwards; }
+@keyframes chispa { from { transform: translate(0,0) scale(1); opacity: 1; } to { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; } }
+
+/* ---------- el avance ---------- */
+.avance { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; min-height: 18px; }
+.punto { width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 3px solid #cfc7ff; transition: all .3s; }
+.punto.actual   { border-color: var(--naranja); transform: scale(1.3); }
+.punto.ok       { background: var(--verde); border-color: var(--verde); }
+.punto.practicar{ background: var(--oro); border-color: #e0a400; }
+
+/* ---------- la página del cuento ---------- */
+.pagina {
+  position: relative;
+  min-height: 190px;
+  padding: 22px 26px;
+  background: var(--papel);
+  background-image: linear-gradient(90deg, rgba(0,0,0,.06), rgba(0,0,0,0) 30px);
+  border: 1px solid #efe3c8;
+  border-radius: 18px;
+  box-shadow: var(--sombra);
+  font-family: Georgia, Cambria, "Times New Roman", serif;
+  font-size: clamp(20px, 2.7vw, 28px);
+  line-height: 1.75;
+}
+.pagina.entra { animation: entra .7s ease; }
+@keyframes entra { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+.parte { margin: 0 0 .55em; --c: #9b8cff; }
+.parte:last-child { margin-bottom: 0; }
+.parte[data-voz="libro"]   { --c: #4361ee; }
+.parte[data-voz="abuela"]  { --c: #e76f51; }
+.parte[data-voz="anciano"] { --c: #2a9d8f; }
+.parte[data-voz="nina"]    { --c: #e84393; }
+.parte[data-voz]:not([data-voz="narradora"]) { border-left: 5px solid var(--c); padding-left: 14px; }
+.etiqueta {
+  display: inline-block; vertical-align: middle; margin-right: 8px;
+  font: 700 13px "Trebuchet MS", sans-serif; letter-spacing: .3px;
+  color: #fff; background: var(--c); border-radius: 999px; padding: 2px 11px;
+}
+
+.pal { border-radius: 6px; transition: background .12s, color .12s; }
+.pal.diciendo { background: var(--oro); box-shadow: 0 0 0 3px var(--oro); }
+.pal.dicha    { color: #5d5775; }
+
+/* la palabra o frase que lee el estudiante */
+.hueco {
+  display: inline;
+  padding: 2px 9px;
+  border-radius: 12px;
+  background: #fff3c4;
+  border: 2px dashed #e0a400;
+  transition: background .25s, border-color .25s;
+}
+.hueco::before { content: "🎤"; font-size: .7em; margin-right: 6px; }
+/* la que le toca leer al estudiante: se ilumina y late para llamar la atención */
+.hueco.pendiente { background: #ffe98a; border-color: #ff9f1c; animation: late 1.1s ease-in-out infinite; }
+@keyframes late { 50% { box-shadow: 0 0 0 9px rgba(255,159,28,.4); } }
+.hueco.escuchando { background: #ffe0e6; border-color: var(--rojo); }
+/* bien leída: verde con ✔ */
+.hueco.ok       { background: #d4f7e2; border: 2px solid var(--verde); animation: none; }
+.hueco.ok::before { content: "✔"; color: var(--verde); font-weight: 700; font-size: 1em; }
+/* mal leída: roja con ✘; se vuelve a intentar */
+.hueco.mal       { background: #ffd6dc; border: 2px solid var(--rojo); }
+.hueco.mal::before { content: "✘"; color: var(--rojo); font-weight: 700; font-size: 1em; }
+.hueco.practicar { background: #ffe9b5; border: 2px solid #e0a400; animation: none; }
+.hueco.practicar::before { content: "★"; color: #e0a400; }
+.hueco .pal.leida { color: var(--verde); font-weight: 700; }
+.hueco.tiembla { animation: tiembla .45s; }
+@keyframes tiembla { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+
+/* lo que dice la narradora fuera del cuento (bienvenida, final): se ve escrito */
+.leyenda {
+  margin: 0; padding: 8px 16px; text-align: center;
+  font: italic 17px Georgia, serif; color: #5b4f9a;
+}
+.leyenda[hidden] { display: none; }
+
+.nota {
+  margin: 0; padding: 10px 16px;
+  background: #fff; border-left: 6px solid var(--lila); border-radius: 12px;
+  box-shadow: var(--sombra); font-size: 15.5px; line-height: 1.5;
+}
+.nota[hidden] { display: none; }
+.nota::before { content: "💡 ¿Sabías que…? "; font-weight: 700; color: var(--lila); }
+
+/* ---------- el turno del estudiante ---------- */
+.turno {
+  /* flota abajo mientras es el turno del estudiante: así el micrófono y la
+     palabra iluminada se ven a la vez, también en un teléfono */
+  position: sticky; bottom: 10px; z-index: 5;
+  display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; align-items: center;
+  padding: 14px 18px; background: #fff; border: 3px solid var(--oro); border-radius: 20px;
+  box-shadow: var(--sombra);
+}
+.turno[hidden] { display: none; }
+.orbe {
+  position: relative; grid-row: span 2;
+  width: 88px; height: 88px; border: 0; border-radius: 50%;
+  font-size: 36px; color: #fff; background: #7b7fa8; cursor: default;
+  transition: background .2s, transform .2s;
+}
+.orbe span { position: relative; z-index: 1; }
+.orbe::after {
+  content: ""; position: absolute; inset: -9px; border-radius: 50%;
+  border: 4px solid currentColor; opacity: 0;
+  transform: scale(calc(1 + var(--nivel, 0) * .45));
+  transition: transform .08s, opacity .2s;
+}
+.turno[data-est="escuchando"] .orbe { background: var(--rojo); }
+.turno[data-est="escuchando"] .orbe::after { opacity: .45; animation: ecos 1.4s ease-out infinite; }
+@keyframes ecos { from { transform: scale(1); opacity: .5; } to { transform: scale(1.5); opacity: 0; } }
+.turno[data-est="voz"] .orbe { background: var(--naranja); }
+.turno[data-est="voz"] .orbe::after { opacity: .6; animation: none; }
+.turno[data-est="acierto"] .orbe { background: var(--verde); }
+.turno[data-est="fallo"] .orbe { background: #9aa0c3; animation: tiembla .45s; }
+
+.turno-consigna { margin: 0; font-size: clamp(17px, 2.2vw, 21px); font-weight: 700; }
+.turno-silabas  { margin: 0; font: 700 clamp(18px, 2.4vw, 24px) Georgia, serif; letter-spacing: 1px; color: var(--lila); }
+.turno-oido     { margin: 0; font-size: 14px; color: #6a6f95; font-style: italic; }
+.onda { display: none; height: 44px; border-radius: 22px; background: #eef0ff; overflow: hidden; max-width: 360px; }
+.onda canvas { width: 100%; height: 100%; display: block; }
+.turno[data-est="escuchando"] .onda, .turno[data-est="voz"] .onda { display: block; }
+.turno-silabas[hidden], .turno-oido[hidden] { display: none; }
+.turno-botones { grid-column: 2; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- botones ---------- */
+.boton {
+  font: 700 15px "Trebuchet MS", system-ui, sans-serif;
+  color: #fff; background: var(--azul);
+  border: 0; border-radius: 999px; padding: 11px 20px; cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0,0,0,.2);
+}
+.boton:hover { filter: brightness(1.07); }
+.boton:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,.2); }
+.boton.claro { color: var(--tinta); background: #fff; border: 2px solid #d4cfff; }
+.boton.principal { background: var(--verde); }
+.boton.grande { font-size: 20px; padding: 15px 32px; background: var(--naranja); }
+.boton:disabled { opacity: .45; cursor: default; }
+.boton[hidden] { display: none; }
+
+.mandos { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+.enlace {
+  background: none; border: 0; padding: 0; margin-left: 4px;
+  color: var(--lila); font: inherit; text-decoration: underline; cursor: pointer;
+}
+
+/* ---------- portada y final ---------- */
+.portada, .final {
+  position: fixed; inset: 0; z-index: 20;
+  display: grid; place-items: center; padding: 18px;
+  background: rgba(40, 36, 90, .55); backdrop-filter: blur(4px);
+  overflow-y: auto;
+}
+.portada[hidden], .final[hidden] { display: none; }
+.portada-caja, .final-caja {
+  width: min(560px, 100%); text-align: center;
+  background: var(--papel); border-radius: 26px; padding: 26px 26px 22px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+.portada-caja h2, .final-caja h2 { margin: 2px 0 2px; font-size: clamp(28px, 5vw, 38px); }
+.subtitulo { margin: 0 0 14px; font: italic 20px Georgia, serif; color: #6b5fb5; }
+.pasos { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 9px; text-align: left; }
+.pasos li { display: flex; gap: 12px; align-items: center; font-size: 17px; background: #fff; border-radius: 14px; padding: 10px 14px; }
+.pasos li > span { font-size: 26px; flex: none; }
+.aviso { margin: 12px 0 0; padding: 9px 13px; background: #fff3c4; border-left: 5px solid #e0a400; border-radius: 10px; font-size: 14.5px; text-align: left; }
+.aviso[hidden] { display: none; }
+.privacidad { margin: 12px 0 0; font-size: 12.5px; line-height: 1.45; color: #6a6f95; text-align: left; }
+.privacidad[hidden] { display: none; }
+
+.estrellas { font-size: 46px; letter-spacing: 6px; }
+.estrellas .apagada { filter: grayscale(1) opacity(.3); }
+.final-resumen { font-size: 18px; margin: 4px 0 12px; }
+.practicar { margin: 0 0 12px; }
+.practicar p { margin: 0 0 8px; font-size: 15px; }
+.practicar[hidden] { display: none; }
+.practicar-lista { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.practicar-lista .boton { padding: 8px 14px; font-size: 14px; }
+.reflexion { background: #efeaff; border-radius: 14px; padding: 11px 14px; font-size: 15.5px; text-align: left; }
+
+/* ---------- teléfono ---------- */
+@media (max-width: 640px) {
+  .app { padding: 8px 10px 30px; gap: 10px; }
+  .escenario { aspect-ratio: 4 / 3; width: min(100%, calc(36vh * 4 / 3)); border-radius: 18px; }
+  .pagina { padding: 16px 16px; min-height: 150px; }
+  .turno { grid-template-columns: auto 1fr; padding: 10px 12px; gap: 4px 12px; }
+  .orbe { width: 64px; height: 64px; font-size: 28px; }
+  .turno-consigna { font-size: 15.5px; }
+  .turno-botones { gap: 6px; }
+  .turno-botones .boton { padding: 8px 12px; font-size: 13.5px; }
+  .portada-caja, .final-caja { padding: 20px 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deriva, .polvo, .titila, .ave, .gota, .olas, .ondas, .vaiven, .coleta, .paginas,
+  .hueco.pendiente, .pagina.entra { animation: none !important; }
+  #viajera-pos, .domo, .esc { transition-duration: .01s; }
+}
+
+/* ---------- el componente montado dentro de cualquier página ---------- */
+.app.sin-escenario .escenario { display: none; }
+.lj-estado { text-align: center; padding: 48px 16px; font: italic 18px Georgia, serif; color: #5b4f9a; }
+.lj-error {
+  margin: 30px auto; max-width: 560px; padding: 16px 20px;
+  background: #fff3c4; border-left: 6px solid #e0a400; border-radius: 12px;
+  font-family: "Trebuchet MS", system-ui, sans-serif; line-height: 1.5;
+}

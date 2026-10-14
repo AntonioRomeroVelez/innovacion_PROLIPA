@@ -1,0 +1,49 @@
+# ============================================================================================
+#  EL LEÓN Y EL RATÓN  —  cuento de ejemplo
+#  Las líneas que empiezan con # son comentarios: el programa las ignora.
+# ============================================================================================
+
+titulo: El león y el ratón
+autor: Fábula tradicional
+descripcion: Un pequeño ratón demuestra que los más pequeños también pueden ayudar a los más grandes.
+portada: imagenes/portada.svg
+idioma: es
+orden: 1
+
+# --------------------------------------------------------------------------------------------
+#  PERSONAJES: nombre | voz | velocidad | tono | color | emoji
+#  velocidad: más lenta (-20%) o más rápida (+20%).  tono: más grave (-30Hz) o más agudo (+40Hz).
+# --------------------------------------------------------------------------------------------
+[personajes]
+narrador | nombre=Narrador | voz=es-EC-LuisNeural   | velocidad=-8%  | tono=+0Hz  | color=#2b8cf0 | emoji=📖
+leon     | nombre=León     | voz=es-MX-JorgeNeural  | velocidad=-14% | tono=-28Hz | color=#d9730d | emoji=🦁
+raton    | nombre=Ratón    | voz=es-EC-AndreaNeural | velocidad=+8%  | tono=+45Hz | color=#9b3fd1 | emoji=🐭
+
+# --------------------------------------------------------------------------------------------
+#  PÁGINAS: cada [pagina] lleva su ilustración; debajo, una línea por intervención: personaje: texto
+# --------------------------------------------------------------------------------------------
+[pagina] imagen=imagenes/p1.svg
+narrador: En lo más profundo de la selva vivía un gran león que dormía la siesta bajo un árbol.
+narrador: Un ratoncito pasó corriendo y, sin querer, le saltó encima de la nariz.
+
+[pagina] imagen=imagenes/p2.svg
+leon: ¡Grrr! ¿Quién se atreve a despertarme?
+raton: ¡Perdón, señor león! No fue mi intención. Si me deja ir, algún día le ayudaré.
+leon: ¡Ja, ja, ja! ¿Tú, tan pequeñito, vas a ayudarme a mí?
+narrador: El león se rió tanto que, al final, soltó al ratoncito.
+
+[pagina] imagen=imagenes/p3.svg
+narrador: Pasaron los días. Una tarde, unos cazadores tendieron una red entre los árboles, y el león cayó atrapado.
+leon: ¡Auxilio! ¡Ayúdenme, por favor!
+
+[pagina] imagen=imagenes/p4.svg
+raton: ¡Ese rugido es del señor león! No tenga miedo, ya voy.
+narrador: El ratoncito corrió hasta la red y empezó a roer las cuerdas, una por una, hasta que el león quedó libre.
+
+[pagina] imagen=imagenes/p5.svg
+leon: ¡Gracias, amigo ratón! Nunca más me reiré de ti.
+raton: No hay de qué. Los pequeños también podemos ayudar a los grandes.
+
+[pagina] imagen=imagenes/p6.svg
+narrador: Desde ese día, el león y el ratón fueron grandes amigos.
+narrador: Moraleja: nadie es tan pequeño que no pueda ayudar, ni tan grande que no necesite ayuda.
